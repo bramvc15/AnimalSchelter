@@ -1,0 +1,109 @@
+#box {
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+#box #header-wrapper {
+  border: 0px none;
+  height: 204px;
+  overflow-x: hidden;
+  width: 1728px;
+}
+
+#box #header {
+  background-color: transparent;
+  height: 204px;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 1730px;
+}
+
+#box #overlap-group {
+  background-color: #d9d3bf;
+  height: 204px;
+  position: relative;
+  width: 1728px;
+}
+
+#box #line {
+  height: 2px;
+  left: 27px;
+  position: absolute;
+  top: 162px;
+  width: 1674px;
+}
+
+#box #text-wrapper {
+  color: #333333;
+  font-family: "Inter-MediumItalic", Helvetica;
+  font-size: 25px;
+  font-style: italic;
+  font-weight: 500;
+  left: 268px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 113px;
+  white-space: nowrap;
+  width: 302px;
+}
+
+#box #logo-schelter {
+  height: 132px;
+  left: 54px;
+  position: absolute;
+  top: 21px;
+  width: 186px;
+}
+
+#box #group {
+  height: 37px;
+  left: 1555px;
+  position: absolute;
+  top: 106px;
+  width: 120px;
+}
+
+
+
+#box #box-arrow-right {
+  height: 37px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 37px;
+}
+
+#box #group-2 {
+  height: 35px;
+  left: 1248px;
+  position: absolute;
+  top: 106px;
+  width: 258px;
+}
+
+#box #text-wrapper-2 {
+  color: #333333;
+  font-family: "Inter-MediumItalic", Helvetica;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 500;
+  left: 48px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 9px;
+  white-space: nowrap;
+}
+
+#box #house-door {
+  height: 35px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 35px;
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/navbarStyle.css}" />
+<link rel="stylesheet" th:href="@{/css/overviewStyle.css}" />
+
+<script src="https://kit.fontawesome.com/yourcode.js"
+	crossorigin="anonymous"></script>
+
+<title>Animal schelter</title>
+</head>
+<body>
+
+	<div id="schelterWrapper">
+		<div th:insert="~{utils :: navbar}"></div>
+
+		<div id="mainContent">
+			<h1>Overview of animals</h1>
+			<div id = "animalWrapper">
+				<div id="animal" th:each="animal: ${animalList}">
+
+					<div id="animalBox">
+						<div id="group-wrapper">
+							<div id="group">
+								<div id="overlap-group">
+									<div id="ractangle">
+										<div id="rectangleImage">
+											<img id="animalImg" th:alt="${animal.name}" th:src="${animal.img}">
+										</div>
+										<div id="ractangleText">
+											<p id="name" th:text="|name: ${animal.name}|" />
+											<p id="breed" th:text="|breed: ${animal.breed}|" />
+											<p id="birthDate" th:text="|birth date: ${animal.geboortedatum}|" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>

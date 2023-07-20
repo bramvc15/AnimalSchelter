@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<div th:fragment="navbar">
+		<nav>
+			<div id="box">
+				<div id="header-wrapper">
+					<header id="header">
+						<div id="overlap-group">
+							<img id="line" alt="Line"  />
+							<h1 id="text-wrapper">Animal shelter</h1>
+							<img width="40px" th:src="@{images/logo.jpg}" /> 
+							<div id="group">
+								<div id="div">Logout</div>
+								<img id="box-arrow-right" alt="Box arrow right"
+									src="box-arrow-right-1.svg" />
+							</div>
+							<div id="group-2">
+								<div id="text-wrapper-2">Your adopted animals</div>
+								<img id="house-door" alt="House door"
+									src="house-door-1.svg" />
+							</div>
+						</div>
+					</header>
+				</div>
+			</div>
+		</nav>
+	</div>
+
+</body>
+
+</html>
