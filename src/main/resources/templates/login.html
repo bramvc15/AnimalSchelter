@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Login Page</title>
+<link rel="stylesheet" th:href="@{/css/loginStyle.css}" />
+</head>
+<body onload='document.loginForm.username.focus();'>
+	<h1>Login</h1>
+
+	<div id="login-box">
+
+		
+
+		<form id="loginBox" action="#" th:action="@{/login}" method="post">
+		<h4 id="loginTitle">Login with Username and Password</h4>
+			<table>
+
+				<tr>
+					<td>User:</td>
+					<td><input type='text' name='username' value=''></td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input type='password' name='password' /></td>
+				</tr>
+				<tr>
+					<td colspan='2'><span th:if="${error}" class="msg-span error" th:text="${error}"></span></td>
+				</tr>
+				<tr>
+					<td colspan='2'><span th:if="${msg}" class="msg-span msg" th:text="${msg}"></span></td>
+				</tr>
+				<tr>
+					<td colspan='2'><button name="submit" type="submit">Login</button></td>
+				</tr>
+			</table>
+
+			<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+		</form>
+	</div>
+
+</body>
+</html>

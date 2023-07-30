@@ -1,109 +1,109 @@
-#box {
+body {
+	margin: 0;
+}
+
+#navbar {
+	display: flex;
+	justify-content: space-between;
+	padding-right: 5%;
+	padding-left: 5%;
+	padding-bottom: 1%;
+}
+
+#navbarWrapper {
+	background-color: #d9d3bf;
+	padding-bottom: 2rem;
+}
+
+#logoutMetNaam {
+	display: Flex;
+	flex-direction: row;
+}
+
+#line1 {
+	width: 95%;
+	transform: rotate(0deg);
+	border: 0.5px solid #333333;
+	margin-left: 2%;
+}
+
+#animalshelter {
+	color: #333333;
+	font-size: 25px;
+	font-family: Inter;
+	line-height: auto;
+	border-style: hidden;
+	font-weight: normal;
+}
+
+#navLeft a {
+	display: flex;
+	align-items: flex-end;
+	text-decoration: none;
+}
+
+#navItem {
+	margin-right: 2rem;
+}
+
+#navRight {
+	display: flex;
+	align-items: flex-end;
+	padding: 0 5% 0 0;
+}
+/* Remove default button styles */
+.logout-form button {
+  border: none;
   background-color: transparent;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  color: inherit;
+  text-align:center;
+  align-items: flex-end;
+  display:flex;
+}
+.logout-form button p {
+  
+  margin:0;
 }
 
-#box #header-wrapper {
-  border: 0px none;
-  height: 204px;
-  overflow-x: hidden;
-  width: 1728px;
+/* Optional: Style the icon to appear before the text */
+.logout-form .fa-house {
+  margin-right: 5px; /* Adjust spacing between the icon and text */
 }
 
-#box #header {
+.fa-solid {
+	font-size: 150%;
+	padding-left: 30px;
+	order: -1;
+}
+/* Style the submit inputs to look like plain text */
+.logout-form input[type="submit"] {
+  border: none;
   background-color: transparent;
-  height: 204px;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 1730px;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  color: inherit;
 }
 
-#box #overlap-group {
-  background-color: #d9d3bf;
-  height: 204px;
-  position: relative;
-  width: 1728px;
-}
-
-#box #line {
-  height: 2px;
-  left: 27px;
-  position: absolute;
-  top: 162px;
-  width: 1674px;
-}
-
-#box #text-wrapper {
-  color: #333333;
-  font-family: "Inter-MediumItalic", Helvetica;
-  font-size: 25px;
-  font-style: italic;
-  font-weight: 500;
-  left: 268px;
-  letter-spacing: 0;
-  line-height: normal;
-  position: absolute;
-  top: 113px;
-  white-space: nowrap;
-  width: 302px;
-}
-
-#box #logo-schelter {
-  height: 132px;
-  left: 54px;
-  position: absolute;
-  top: 21px;
-  width: 186px;
-}
-
-#box #group {
-  height: 37px;
-  left: 1555px;
-  position: absolute;
-  top: 106px;
-  width: 120px;
+/* Optional: Style the icon to appear before the text */
+.logout-form .fa-house {
+  margin-right: 5px; /* Adjust spacing between the icon and text */
 }
 
 
-
-#box #box-arrow-right {
-  height: 37px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 37px;
+#logoutMetNaam {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	font-size: 14px; /* Customize font size if needed */
+	color: #000; /* Set the desired text color */
+	cursor: pointer;
 }
-
-#box #group-2 {
-  height: 35px;
-  left: 1248px;
-  position: absolute;
-  top: 106px;
-  width: 258px;
-}
-
-#box #text-wrapper-2 {
-  color: #333333;
-  font-family: "Inter-MediumItalic", Helvetica;
-  font-size: 20px;
-  font-style: italic;
-  font-weight: 500;
-  left: 48px;
-  letter-spacing: 0;
-  line-height: normal;
-  position: absolute;
-  top: 9px;
-  white-space: nowrap;
-}
-
-#box #house-door {
-  height: 35px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 35px;
+.fa-solid{
+	margin-right:0.5rem;
+	font-size:25px;
 }

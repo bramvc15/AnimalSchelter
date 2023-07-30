@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/navbarStyle.css}" />
+<link rel="stylesheet" th:href="@{/css/animalDetailStyle.css}" />
+<script src="https://kit.fontawesome.com/yourcode.js"
+	crossorigin="anonymous"></script>
+
+<title>animal Detailpagina</title>
+</head>
+<body>
+	<div th:insert="~{utils :: navbar}"></div>
+
+
+
+	<div id="detailContainer">
+		<div id="detailWrapper">
+			<div id="detail">
+
+				<div id="titleEnButton">
+					<div id="titleLinks">
+						<h3 id="animaltitle">Animal detailpagina</h3>
+						<div id="reserveButton">
+							<form th:if="${adopted == false}"
+								th:action="|/AddAnimalAdoption/${animal.identificatiecode}|"
+								th:object="${adopted}" method="post">
+
+
+								<button id="flexButton" type="submit"
+									th:if="${adopted == false}">
+									<span>Adopt</span>
+								</button>
+							</form>
+							<form th:if="${adopted == true && owner != true}">
+								<button id="flexButton" type="submit">
+									<span>Already Adopted</span>
+								</button>
+							</form>
+							<form th:if="${adopted == true && owner == true}"
+									th:action="|/RemoveAnimalAdoption/${animal.identificatiecode}|"
+									th:object="${adopted}" method="post">
+									<button id="flexButton" type="submit">
+										<span>Cancel adoption</span>
+									</button>
+								</form>
+						</div>
+					</div>
+				</div>
+				<div id="animalDetail">
+
+					<div id="imgPart">
+						<img id="animalImg" th:alt="${animal.name}" th:src="${animal.img}">
+					</div>
+					<div id="informationSep">
+						<div id="animalInfo">
+							<div id="information">
+								<p th:text="|Name: ${animal.name}|"></p>
+								<p th:text="|Breed: ${animal.breed}|"></p>
+								<p th:text="|Gender: ${animal.gender}|"></p>
+								<p th:text="|Age: ${age}|"></p>
+								<p th:text="|Medical cost: ${animal.medicalCost}|"></p>
+							</div>
+							<div id="specifications">
+								<ul>
+									<li>Compadable with other animals</li>
+									<li>Compadable with little childeren</li>
+									<li>Compadable with older childeren</li>
+									<li>Compadable with cats</li>
+								</ul>
+								<ul>
+									<li>Compadable with dogs</li>
+									<li>Suitable as an indoor cat</li>
+									<li>Already reserved</li>
+								</ul>
+							</div>
+
+
+						</div>
+
+						<div id="locationDetails">
+							<ul>
+								<li>Code 1</li>
+								<li>Code 2</li>
+								<li>Cage Name</li>
+							</ul>
+							<div id="verblijfplaatsen"
+								th:each="verblijfplaats, iStat: ${animal.verplijfplaatsen}">
+								<p
+									th:text="|${iStat.count}. &emsp;&emsp;${verblijfplaats.hokcode1}&emsp;&emsp;&emsp;&emsp;${verblijfplaats.hokcode2}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;${verblijfplaats.hoknaam}|"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -8,41 +8,50 @@
 <script src="https://kit.fontawesome.com/yourcode.js"
 	crossorigin="anonymous"></script>
 
+
+
 <title>Animal schelter</title>
 </head>
 <body>
 
-	<div id="schelterWrapper">
-		<div th:insert="~{utils :: navbar}"></div>
+	<div th:insert="~{utils :: navbar}"></div>
 
-		<div id="mainContent">
-			<h1>Overview of animals</h1>
-			<div id = "animalWrapper">
-				<div id="animal" th:each="animal: ${animalList}">
 
-					<div id="animalBox">
-						<div id="group-wrapper">
-							<div id="group">
-								<div id="overlap-group">
-									<div id="ractangle">
-										<div id="rectangleImage">
-											<img id="animalImg" th:alt="${animal.name}" th:src="${animal.img}">
-										</div>
-										<div id="ractangleText">
-											<p id="name" th:text="|name: ${animal.name}|" />
-											<p id="breed" th:text="|breed: ${animal.breed}|" />
-											<p id="birthDate" th:text="|birth date: ${animal.geboortedatum}|" />
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+	<div id="mainContent">
+		<div id="contentWrapper">
+			<div id="titleAndButton">
+				<div id="pageTitle">
+					<h1 id="animalTitle">Overview of animals</h1>
+					<span th:text=${addMessage}></span>
 				</div>
+				<div id="buttonRechts">
+					<th:block
+						th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+						<a id="rechtsKnop" th:href="@{/addAnimal}"> Add animal</a>
+					</th:block>
+				</div>
+			</div>
+			<div id="animalWrapper">
+
+				<div id="animal" th:each="animal: ${animalList}">
+					<a th:href="|/animal/${animal.identificatiecode}|">
+						<div id="animalBox">
+							<div id="imagePart">
+								<img id="animalImg" class="text" th:alt="${animal.name}"
+									th:src="${animal.img}">
+							</div>
+							<p id="name" class="text" th:text="|name: ${animal.name}|" />
+							<p id="breed" class="text" th:text="|breed: ${animal.breed}|" />
+							<p id="birthDate" class="text"
+								th:text="|birth date: ${animal.dateOfBirth}|" />
 
 
+						</div>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>

@@ -27,12 +27,13 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.csrf()
+        .and()
         .authorizeHttpRequests(requests ->
                 requests.requestMatchers("/login**").permitAll()
                         .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/403**").permitAll()
-                        .requestMatchers("/home**").permitAll()
+						.anyRequest().hasAnyRole("ADMIN", "USER")
         )
                 .formLogin(form ->
                         form.defaultSuccessUrl("/home", true)

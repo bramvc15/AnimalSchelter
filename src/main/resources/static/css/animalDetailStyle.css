@@ -1,0 +1,108 @@
+#detailContainer {
+	height: 100vh;
+	background-image: url("background.png");
+	background-size: cover;
+}
+
+#titleLinks h3 {
+	margin-top: 0;
+}
+
+#imgPart {
+	height: 300px;
+	margin-bottom: 10px;
+}
+
+#animalImg {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+#detailWrapper {
+	background-color: #EFE8D2;
+	padding-top: 5rem;
+	padding-bottom: 5rem;
+}
+
+#detail {
+	padding-left: 10%;
+	padding-right: 10%;
+	
+}
+
+#animalDetail {
+	display: flex;
+}
+
+#animalInfo {
+	margin-left: 2rem;
+	display: flex;
+}
+
+#animalInfo p {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#locationDetails {
+	display: flex;
+	flex-direction: column;
+}
+
+#locationDetails {
+	display: flex;
+	flex-direction: column;
+}
+
+#locationDetails ul {
+	display: flex;
+}
+
+#locationDetails li {
+	text-decoration: none;
+	list-style: none;
+	margin-left: 3rem;
+}
+
+#verblijfplaatsen p {
+	margin-left: 4rem;
+}
+
+#animaltitle {
+	text-align: center;
+	color: #333;
+	font-family: Inter;
+	font-size: 1.75rem;
+	font-style: italic;
+	font-weight: 500;
+	line-height: normal;
+}
+#specifications{
+	display:flex;
+	
+	margin-left:5rem;
+	
+}
+#specifications li{
+	text-decoration: none;
+	padding:0.5rem;
+	list-style: none;
+}
+#flexButton{
+	background-color: #EFE8D2;
+	border-color: #d9d3bf;
+	border-width: thick;
+	text-align: right;
+	align-content: right;
+	font-family: Inter;
+	font-size: 1.25rem;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	text-decoration: none;
+	padding: 0.5rem;
+}
+#reserveButton{
+	align-content: right;
+	text-align: right;
+}
