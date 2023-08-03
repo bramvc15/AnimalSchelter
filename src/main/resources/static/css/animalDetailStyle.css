@@ -23,11 +23,13 @@
 	padding-top: 5rem;
 	padding-bottom: 5rem;
 }
-
+#alreadyAd{
+	color: red;
+	font-size: 16px;
+}
 #detail {
 	padding-left: 10%;
 	padding-right: 10%;
-	
 }
 
 #animalDetail {
@@ -77,23 +79,29 @@
 	font-weight: 500;
 	line-height: normal;
 }
-#specifications{
-	display:flex;
-	
-	margin-left:5rem;
-	
+
+#specifications {
+	display: flex;
+	margin-left: 5rem;
 }
-#specifications li{
+
+#specifications li {
 	text-decoration: none;
-	padding:0.5rem;
+	padding: 0.5rem;
 	list-style: none;
 }
-#flexButton{
-	background-color: #EFE8D2;
-	border-color: #d9d3bf;
-	border-width: thick;
-	text-align: right;
-	align-content: right;
+#specifications li i{
+		
+	padding-left:0;
+	font-size: 18px;
+}
+#flexButton {
+	width: 15.5rem;
+	height: 2.625rem;
+	flex-shrink: 0;
+	border-radius: 0.3125rem;
+	background: #B5A781;
+	color: #FFF;
 	font-family: Inter;
 	font-size: 1.25rem;
 	font-style: normal;
@@ -102,7 +110,7 @@
 	text-decoration: none;
 	padding: 0.5rem;
 }
-#reserveButton{
+#reserveButton {
 	align-content: right;
 	text-align: right;
 }

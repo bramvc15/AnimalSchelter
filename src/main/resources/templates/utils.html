@@ -6,7 +6,7 @@
 	<div th:fragment="navbar">
 		<script src="https://kit.fontawesome.com/0008ae95b2.js"
 			crossorigin="anonymous"></script>
-			
+
 		<nav>
 			<div id='navbarWrapper'>
 				<div id='navbar'>
@@ -22,10 +22,11 @@
 					<div id="navRight">
 
 						<div id='navItem'>
-							<div id='youradoptedanimals' class='youradoptedanimals'>
-								<i class="fa-solid fa-dog"></i> Your adopted animals
+							<a id='youradoptedanimals' th:href="@{/myAdoptedAnimals}"
+								class='youradoptedanimals'> <i class="fa-solid fa-dog"></i>
+								Your adopted animals
 
-							</div>
+							</a>
 						</div>
 						<div id="navItemStart">
 							<form th:fragment="logout" th:action="@{/logout}" method="post"
@@ -40,7 +41,7 @@
 									<button
 										th:unless="${#authorization.expression('hasRole(''ADMIN'')')}"
 										type="submit" name="logout" value="Logout (User)">
-										
+
 										<i class="fa-solid fa-right-from-bracket"></i>
 
 										<p th:text="|Logout (User) ${userName}|"></p>

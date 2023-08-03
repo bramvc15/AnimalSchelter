@@ -23,6 +23,7 @@ public class SecurityConfig {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(new BCryptPasswordEncoder());
+        
     }
 
     @Bean
@@ -33,6 +34,8 @@ public class SecurityConfig {
                 requests.requestMatchers("/login**").permitAll()
                         .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/403**").permitAll()
+                        .requestMatchers("/addAnimal").hasRole("ADMIN")
+                        .requestMatchers("/animal/*").hasAnyRole("ADMIN","USER")
 						.anyRequest().hasAnyRole("ADMIN", "USER")
         )
                 .formLogin(form ->

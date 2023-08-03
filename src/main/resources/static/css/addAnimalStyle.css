@@ -1,0 +1,94 @@
+#formContainer {
+	display: inline-block;
+	padding: 20px;
+	background-color: #F0EDE5;
+	border: 2px solid #B5A781;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	margin-left:32%;
+}
+
+#section {
+	display: flex;
+	
+	
+}
+
+#formContainer lable {
+	margin-top: 1rem;
+}
+.error{
+	color:red;
+}
+#formWrapper {
+	min-height: 100vh;
+	/* Use min-height to ensure the container takes the full viewport height if needed */
+	background-image: url("background.png");
+	background-size: cover;
+}
+#kanMet{
+	display:flex;
+	
+
+}
+#checkPartOne{
+	margin-left:2rem;
+}
+#checkPartTwo{
+	margin-left:2rem;
+}
+#formitem {
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: column;
+}
+
+#formitem2 {
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: column;
+	margin-left: 2rem;
+}
+
+#submit {
+	margin-top: 2rem;
+	width: 40%;
+	height: 2.625rem;
+	flex-shrink: 0;
+	border-radius: 0.3125rem;
+	background: #B5A781;
+	color: #FFF;
+	font-family: Inter;
+	font-size: 1.25rem;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	text-decoration: none;
+	padding: 0.3rem;
+}
+
+input {
+	background-color: #d9d3bf;
+	border: none; /* Remove the border */
+	border-bottom: 2px solid #FFF; /* Add a border only at the bottom */
+	padding: 10px 15px;
+	border-radius: 5px;
+	font-size: 16px;
+	color: #333;
+	outline: none;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+	color: #555;
+}
+/* Add a subtle box shadow when the input is focused */
+input:focus {
+	box-shadow: 0 0 5px rgba(181, 167, 129, 0.5);
+}
+
+#verblijfplaats {
+	margin-bottom: 1rem;
+}

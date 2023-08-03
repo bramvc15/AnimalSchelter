@@ -8,46 +8,88 @@
 <script src="https://kit.fontawesome.com/yourcode.js"
 	crossorigin="anonymous"></script>
 
-
-
-<title>Animal schelter</title>
+<title>Animal shelter</title>
 </head>
 <body>
 
 	<div th:insert="~{utils :: navbar}"></div>
 
-
 	<div id="mainContent">
 		<div id="contentWrapper">
 			<div id="titleAndButton">
 				<div id="pageTitle">
-					<h1 id="animalTitle">Overview of animals</h1>
+					<h1 id="animalTitle" th:text= "#{animal.text.title}"></h1>
 					<span th:text=${addMessage}></span>
 				</div>
 				<div id="buttonRechts">
 					<th:block
 						th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-						<a id="rechtsKnop" th:href="@{/addAnimal}"> Add animal</a>
+						<a id="rechtsKnop" th:href="@{/addAnimal}" th:text= "#{button.add.text}"> Add animal</a>
 					</th:block>
 				</div>
 			</div>
+			<form id="filterForm" method="get">
+				<div id="filterSection">
+					<label for="breedFilter" th:text= "#{select.breed}"></label> <select
+						id="breedFilter" name="selectedBreed">
+						<option value="" th:text="#{select.breed.dropdown}"></option>
+						<th:block th:each="breed: ${breedList}">
+							<option th:value="${breed}" th:text="${breed}" />
+						</th:block>
+					</select>
+					<button type="submit" th:text="#{text.filter}">Filter</button>
+				</div>
+			</form>
+			<script>
+				document
+						.getElementById("filterForm")
+						.addEventListener(
+								"submit",
+								function(event) {
+									event.preventDefault();
+									const selectedBreed = document
+											.getElementById("breedFilter").value;
+									const baseUrl = "/filterByBreed/";
+									const url = selectedBreed ? (baseUrl + selectedBreed)
+											: baseUrl;
+									window.location.href = url;
+								});
+			</script>
+
 			<div id="animalWrapper">
 
 				<div id="animal" th:each="animal: ${animalList}">
 					<a th:href="|/animal/${animal.identificatiecode}|">
 						<div id="animalBox">
+							
 							<div id="imagePart">
 								<img id="animalImg" class="text" th:alt="${animal.name}"
 									th:src="${animal.img}">
 							</div>
-							<p id="name" class="text" th:text="|name: ${animal.name}|" />
-							<p id="breed" class="text" th:text="|breed: ${animal.breed}|" />
+							
+							<p id="name" class="text" th:text="|#{animal.text.name} ${animal.name}|" />
+							<div id= "textRemove">
+							<form id="delete" th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+								th:action="@{|/deleteAnimal/${animal.identificatiecode}|}"
+								method="post">
+								<button type="submit" id="deleteButton">
+									<i class="fa-solid fa-trash"></i>
+								</button>
+							</form>
+							</div>
+							<p id="breed" class="text" th:text="|#{animal.text.breed} ${animal.breed}|" />
 							<p id="birthDate" class="text"
-								th:text="|birth date: ${animal.dateOfBirth}|" />
-
-
+								th:text="|#{animal.text.birth.date} ${animal.dateOfBirth}|" />
+							<p th:if="${!animal.kanMet[5]}" id=cross>
+								<i class="fa-solid fa-check"></i><span th:text="#{free.for.adoption}"></span>
+							</p>
+							<p th:if="${animal.kanMet[5]}" id=check>
+							<i class="fa-solid fa-xmark"></i><span th:text="#{animal.text.adopted}"></span>
+								
+							</p>
 						</div>
 					</a>
+					<div th:unless="${#authorization.expression('hasRole(''ADMIN'')')}"></div>
 				</div>
 			</div>
 		</div>

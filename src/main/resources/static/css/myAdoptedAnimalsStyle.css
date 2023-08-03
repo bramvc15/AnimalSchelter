@@ -1,0 +1,95 @@
+/* Global styles (can be shared across multiple pages) */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #d9d3bf;
+}
+
+/* Styles specific to the My Adopted Animals page */
+#main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 20px;
+}
+
+/* Styles for the animal boxes */
+#animalBox {
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  display:flex;
+}
+
+#imagePart {
+  height: 200px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+#animalImg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#name {
+  font-weight: bold;
+  font-size: 18px;
+}
+#text{
+	text-decoration: none;
+	color: black;
+	margin-left:4rem;
+}
+#deleteButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+#deleteButton i {
+  font-size: 18px;
+  color: #ff0000;
+}
+
+#breed, #birthDate {
+  font-size: 14px;
+  color: #555;
+}
+
+#cross, #check {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}
+
+#cross i {
+  color: green;
+}
+
+#check i {
+  color: red;
+}
+
+/* Styles for the navigation bar (assuming it's included from the utils file) */
+/* ... (styles for the navigation bar) ... */

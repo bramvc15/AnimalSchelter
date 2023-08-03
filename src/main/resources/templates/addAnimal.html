@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/navbarStyle.css}" />
+<link rel="stylesheet" th:href="@{/css/addAnimalStyle.css}" />
+<script src="https://kit.fontawesome.com/yourcode.js"
+	crossorigin="anonymous"></script>
+
+<title>animal Detailpagina</title>
+</head>
+<body>
+	<div id="main-content">
+		<div th:insert="~{utils :: navbar}"></div>
+		<div id="formWrapper">
+			<div id="formContainer">
+				<form th:action="@{/addAnimal}" th:object="${animal}" method="post">
+
+					<div id=center>
+						<div id=section>
+							<div id=formitem>
+								<label for="">Name:</label> <input type="text" id="name"
+									th:field="*{name}"> <span
+									th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+									class="error"></span>
+							</div>
+
+						</div>
+						<div id=section>
+							<div id=formitem>
+								<label for="">Identification code:</label> <input type="text"
+									id="identificatiecode" th:field="*{identificatiecode}"><br>
+								<span th:if="${#fields.hasErrors('identificatiecode')}"
+									th:errors="*{identificatiecode}" class="error"></span>
+							</div>
+							<div id=formitem2>
+								<label for="">Breed:</label> <input type="text" id="breed"
+									th:field="*{breed}"> <span
+									th:if="${#fields.hasErrors('breed')}" th:errors="*{breed}"
+									class="error"></span>
+							</div>
+						</div>
+						<div id=section>
+							<div id=formitem>
+								<label for="">Gender:</label> <input type="text" id="gender"
+									th:field="*{gender}"> <span
+									th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"
+									class="error"></span>
+							</div>
+							<div id=formitem2>
+								<label for="">Birth date:</label> <input type="date"
+									id="dateOfBirth" th:field="*{dateOfBirth}"> <span
+									th:if="${#fields.hasErrors('dateOfBirth')}"
+									th:errors="*{dateOfBirth}" class="error"></span> <br> <label
+									for="unknownDateOfBirth">Don't know the dateOfBirth:</label> <input
+									type="checkbox" id="unknownDateOfBirth"
+									onclick="toggleAgeEstimation()">
+								<div id="ageEstimationContainer" style="display: none;">
+									<label for="ageEstimation">Age Estimation:</label> <select
+										id="ageEstimation" name="ageEstimation">
+										<option value="young">Young</option>
+										<option value="adult">Adult</option>
+										<option value="senior">Senior</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id=formitem>
+						<label for="">Medical cost:</label> <input type="text"
+							id="medicalCost" th:field="*{medicalCost}"> <span
+							th:if="${#fields.hasErrors('medicalCost')}"
+							th:errors="*{medicalCost}" class="error"></span>
+					</div>
+					<div id=formitem>
+						<label>animal enclosure:</label>
+						<div id="verblijfplaats"
+							th:each="plaats, index : ${animal.verplijfplaatsen}">
+
+							<input type="text" th:id="'location2_hokcode1_' + ${index}"
+								th:field="*{verplijfplaatsen[__${index.index}__].hokcode1}">
+							<span
+								th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hokcode1')}"
+								th:errors="*{verplijfplaatsen[__${index.index}__].hokcode1}"
+								class="error"></span> <input type="text"
+								th:id="'location2_hokcode2_' + ${index}"
+								th:field="*{verplijfplaatsen[__${index.index}__].hokcode2}">
+							<span
+								th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hokcode2')}"
+								th:errors="*{verplijfplaatsen[__${index.index}__].hokcode2}"
+								class="error"></span> <input type="text"
+								th:id="'verplijfplaatsen2_hoknaam_' + ${index}"
+								th:field="*{verplijfplaatsen[__${index.index}__].hoknaam}">
+							<span
+								th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hoknaam')}"
+								th:errors="*{verplijfplaatsen[__${index.index}__].hoknaam}"
+								class="error"></span>
+						</div>
+					</div>
+					<label for="image">Cover Foto:</label> <input type="text"
+						id="image" name="image" th:field="*{img}"><br>
+
+					<div id="kanMet">
+						<div id="checkPartOne">
+							<label> <input type="checkbox"
+								th:checked="${animal.kanMet[0]}" th:field="*{kanMet[0]}" />
+								Compadable with little childeren
+							</label> <label> <input type="checkbox"
+								th:checked="${animal.kanMet[1]}" th:field="*{kanMet[1]}" />
+								Compadable with older childeren
+							</label> <label> <input type="checkbox"
+								th:checked="${animal.kanMet[2]}" th:field="*{kanMet[2]}" />
+								Compadable with cats
+							</label>
+						</div>
+						<div id="checkPartTwo">
+							<label> <input type="checkbox"
+								th:checked="${animal.kanMet[3]}" th:field="*{kanMet[3]}" />
+								Compadable with dogs
+							</label> <label> <input type="checkbox"
+								th:checked="${animal.kanMet[4]}" th:field="*{kanMet[4]}" />
+								Suitable as an indoor cat
+							</label>
+						</div>
+					</div>
+
+					<input id="submit" type="submit" value="Add Animal"
+						formmethod="post">
+				</form>
+			</div>
+		</div>
+	</div>
+	<script>
+		function toggleAgeEstimation() {
+			var checkbox = document.getElementById("unknownDateOfBirth");
+			var ageEstimationContainer = document
+					.getElementById("ageEstimationContainer");
+			if (checkbox.checked) {
+				ageEstimationContainer.style.display = "block";
+			} else {
+				ageEstimationContainer.style.display = "none";
+			}
+		}
+	</script>
+</body>
+</html>

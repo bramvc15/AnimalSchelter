@@ -22,28 +22,47 @@
 					<div id="titleLinks">
 						<h3 id="animaltitle">Animal detailpagina</h3>
 						<div id="reserveButton">
-							<form th:if="${adopted == false}"
-								th:action="|/AddAnimalAdoption/${animal.identificatiecode}|"
-								th:object="${adopted}" method="post">
+							<div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+								<form th:if="${adopted == false}"
+									th:action="@{/AddAnimalAdoption/{identificatiecode}(identificatiecode=${animal.identificatiecode})}"
+									method="post">
+									<button id="flexButton" type="submit">
+										<span>Adopt</span>
+									</button>
+								</form>
 
+								<form th:if="${adopted == true}"
+									th:action="@{/RemoveAnimalAdoption/{identificatiecode}(identificatiecode=${animal.identificatiecode})}"
+									method="post">
+									<button id="flexButton" type="submit">
+										<span>Cancel adoption (admin)</span>
+									</button>
+								</form>
+							</div>
+							<div
+								th:unless="${#authorization.expression('hasRole(''ADMIN'')')}">
+								<form th:if="${adopted == false}"
+									th:action="@{/AddAnimalAdoption/{identificatiecode}(identificatiecode=${animal.identificatiecode})}"
+									method="post">
+									<button id="flexButton" type="submit">
+										<span>Adopt</span>
+									</button>
+								</form>
 
-								<button id="flexButton" type="submit"
-									th:if="${adopted == false}">
-									<span>Adopt</span>
-								</button>
-							</form>
-							<form th:if="${adopted == true && owner != true}">
-								<button id="flexButton" type="submit">
-									<span>Already Adopted</span>
-								</button>
-							</form>
-							<form th:if="${adopted == true && owner == true}"
-									th:action="|/RemoveAnimalAdoption/${animal.identificatiecode}|"
-									th:object="${adopted}" method="post">
+								<div id="alreadyAd" th:if="${adopted == true && owner != true}">
+										<span>Already Adopted</span>
+								</div>
+
+								<form th:if="${adopted == true && owner == true}"
+									th:action="@{/RemoveAnimalAdoption/{identificatiecode}(identificatiecode=${animal.identificatiecode})}"
+									method="post">
 									<button id="flexButton" type="submit">
 										<span>Cancel adoption</span>
 									</button>
 								</form>
+							</div>
+
+
 						</div>
 					</div>
 				</div>
@@ -59,19 +78,29 @@
 								<p th:text="|Breed: ${animal.breed}|"></p>
 								<p th:text="|Gender: ${animal.gender}|"></p>
 								<p th:text="|Age: ${age}|"></p>
-								<p th:text="|Medical cost: ${animal.medicalCost}|"></p>
+								<p th:text="|Medical cost: ${#numbers.formatDecimal(animal.medicalCost,0,'COMMA',2,'POINT')}|"></p>
+	
+
+
 							</div>
 							<div id="specifications">
 								<ul>
-									<li>Compadable with other animals</li>
-									<li>Compadable with little childeren</li>
-									<li>Compadable with older childeren</li>
-									<li>Compadable with cats</li>
+
+									<li><i th:if="${animal.kanMet[0]}"
+										class="fa-solid fa-check"></i> Compadable with little
+										childeren</li>
+									<li><i th:if="${animal.kanMet[1]}"
+										class="fa-solid fa-check"></i> Compadable with older childeren</li>
+									<li><i th:if="${animal.kanMet[2]}"
+										class="fa-solid fa-check"></i> Compadable with cats</li>
 								</ul>
 								<ul>
-									<li>Compadable with dogs</li>
-									<li>Suitable as an indoor cat</li>
-									<li>Already reserved</li>
+									<li><i th:if="${animal.kanMet[3]}"
+										class="fa-solid fa-check"></i> Compadable with dogs</li>
+									<li><i th:if="${animal.kanMet[4]}"
+										class="fa-solid fa-check"></i> Suitable as an indoor cat</li>
+									<li><i th:if="${adopted}" class="fa-solid fa-check"></i>
+										Already reserved</li>
 								</ul>
 							</div>
 

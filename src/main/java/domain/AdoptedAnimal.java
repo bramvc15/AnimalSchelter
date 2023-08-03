@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -23,6 +24,7 @@ public class AdoptedAnimal implements Serializable {/**
 	
 	@Id
 	private String animalId;
+	@Column(name = "reserved")
 	private boolean reserved;
 	@ManyToOne
 	private User user;
