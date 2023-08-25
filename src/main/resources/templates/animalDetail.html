@@ -20,7 +20,7 @@
 
 				<div id="titleEnButton">
 					<div id="titleLinks">
-						<h3 id="animaltitle">Animal detailpagina</h3>
+						<h3 id="animaltitle">Animal detailpage</h3>
 						<div id="reserveButton">
 							<div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 								<form th:if="${adopted == false}"
@@ -77,8 +77,9 @@
 								<p th:text="|Name: ${animal.name}|"></p>
 								<p th:text="|Breed: ${animal.breed}|"></p>
 								<p th:text="|Gender: ${animal.gender}|"></p>
-								<p th:text="|Age: ${age}|"></p>
-								<p th:text="|Medical cost: ${#numbers.formatDecimal(animal.medicalCost,0,'COMMA',2,'POINT')}|"></p>
+								<p th:if="${age != null}" th:text="|Age: ${age}|"></p>
+								<p th:text="|Medical cost: € ${animal.medicalCost == 0 ? '0.00' : #numbers.formatDecimal(animal.medicalCost, 0, 'COMMA', 2, 'POINT')}|"></p>
+
 	
 
 

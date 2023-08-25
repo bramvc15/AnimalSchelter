@@ -6,8 +6,11 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,14 +26,17 @@ public class AdoptedAnimal implements Serializable {/**
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	private String animalId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	@ManyToOne
+	private Animal animal;
 	@Column(name = "reserved")
 	private boolean reserved;
 	@ManyToOne
 	private User user;
 	
-	public AdoptedAnimal(String animalId, boolean reserved, User userName) {
-		this.animalId = animalId;
+	public AdoptedAnimal(Animal animal, boolean reserved, User userName) {
+		this.animal = animal;
 		this.reserved = reserved;
 		this.user = userName;
 	}

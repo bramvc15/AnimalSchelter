@@ -49,15 +49,18 @@
 							</div>
 							<div id=formitem2>
 								<label for="">Birth date:</label> <input type="date"
-									id="dateOfBirth" th:field="*{dateOfBirth}"> <span
+									id="dateOfBirth" th:field="*{dateOfBirth}"> 
+									<span
 									th:if="${#fields.hasErrors('dateOfBirth')}"
-									th:errors="*{dateOfBirth}" class="error"></span> <br> <label
+									th:errors="*{dateOfBirth}" class="error"></span> 
+									<br> <label
 									for="unknownDateOfBirth">Don't know the dateOfBirth:</label> <input
 									type="checkbox" id="unknownDateOfBirth"
 									onclick="toggleAgeEstimation()">
 								<div id="ageEstimationContainer" style="display: none;">
 									<label for="ageEstimation">Age Estimation:</label> <select
 										id="ageEstimation" name="ageEstimation">
+										<option value="">Please select</option>
 										<option value="young">Young</option>
 										<option value="adult">Adult</option>
 										<option value="senior">Senior</option>
@@ -73,28 +76,41 @@
 							th:errors="*{medicalCost}" class="error"></span>
 					</div>
 					<div id=formitem>
+
 						<label>animal enclosure:</label>
+						<ul id="flexHeader">
+							<li id="inputHeader">Cage code 1:</li>
+							<li id="inputHeader">Cage code 2:</li>
+							<li id="inputHeader">Cage name:</li>
+						</ul>
 						<div id="verblijfplaats"
 							th:each="plaats, index : ${animal.verplijfplaatsen}">
-
-							<input type="text" th:id="'location2_hokcode1_' + ${index}"
-								th:field="*{verplijfplaatsen[__${index.index}__].hokcode1}">
-							<span
-								th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hokcode1')}"
-								th:errors="*{verplijfplaatsen[__${index.index}__].hokcode1}"
-								class="error"></span> <input type="text"
-								th:id="'location2_hokcode2_' + ${index}"
-								th:field="*{verplijfplaatsen[__${index.index}__].hokcode2}">
-							<span
-								th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hokcode2')}"
-								th:errors="*{verplijfplaatsen[__${index.index}__].hokcode2}"
-								class="error"></span> <input type="text"
-								th:id="'verplijfplaatsen2_hoknaam_' + ${index}"
-								th:field="*{verplijfplaatsen[__${index.index}__].hoknaam}">
-							<span
-								th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hoknaam')}"
-								th:errors="*{verplijfplaatsen[__${index.index}__].hoknaam}"
-								class="error"></span>
+							<div id="errrorInput">
+								<input type="text" th:id="'location2_hokcode1_' + ${index}"
+									th:field="*{verplijfplaatsen[__${index.index}__].hokcode1}"
+									th:value="6">
+								<span
+									th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hokcode1')}"
+									th:errors="*{verplijfplaatsen[__${index.index}__].hokcode1}"
+									class="error"></span>
+							</div>
+							<div id="errrorInput">
+								<input type="text" th:id="'location2_hokcode2_' + ${index}"
+									th:field="*{verplijfplaatsen[__${index.index}__].hokcode2}">
+								<span
+									th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hokcode2')}"
+									th:errors="*{verplijfplaatsen[__${index.index}__].hokcode2}"
+									class="error"></span>
+							</div>
+							<div id="errrorInput2">
+								<input type="text"
+									th:id="'verplijfplaatsen2_hoknaam_' + ${index}"
+									th:field="*{verplijfplaatsen[__${index.index}__].hoknaam}">
+								<span
+									th:if="${#fields.hasErrors('verplijfplaatsen[__${index.index}__].hoknaam')}"
+									th:errors="*{verplijfplaatsen[__${index.index}__].hoknaam}"
+									class="error"></span>
+							</div>
 						</div>
 					</div>
 					<label for="image">Cover Foto:</label> <input type="text"

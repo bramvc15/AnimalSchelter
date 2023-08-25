@@ -34,6 +34,7 @@ public class SecurityConfig {
                 requests.requestMatchers("/login**").permitAll()
                         .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/403**").permitAll()
+                        .requestMatchers("/rest/**").permitAll()
                         .requestMatchers("/addAnimal").hasRole("ADMIN")
                         .requestMatchers("/animal/*").hasAnyRole("ADMIN","USER")
 						.anyRequest().hasAnyRole("ADMIN", "USER")

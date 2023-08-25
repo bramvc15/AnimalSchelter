@@ -14,9 +14,12 @@ import domain.Animal;
 public interface AdoptedAnimalRepository extends CrudRepository<AdoptedAnimal,String> {
 
 	Optional<List<AdoptedAnimal>> findAllByUser(User user);
-	Optional<List<AdoptedAnimal>> findAllByReservedFalse();
-	@Query("SELECT a.animalId FROM AdoptedAnimal a WHERE a.reserved = true")
-	Optional<List<String>> findAnimalIdsByReservedTrue();
+	@Query("SELECT a.animal FROM AdoptedAnimal a WHERE a.reserved = false")
+	Optional<List<Animal>> findAnimalsByReservedFalse();
+	@Query("SELECT a.animal FROM AdoptedAnimal a WHERE a.reserved = true")
+	Optional<List<Animal>> findAnimalsByReservedTrue();
 
 	Optional<List<AdoptedAnimal>> findByUser_UsernameAndReservedTrue(String username);
+	Optional<AdoptedAnimal> findByAnimal_Identificatiecode(String identificatiecode);
+	Optional<List<AdoptedAnimal>> findByUser(User user);
 }

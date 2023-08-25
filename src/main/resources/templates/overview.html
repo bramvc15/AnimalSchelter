@@ -17,29 +17,46 @@
 	<div id="mainContent">
 		<div id="contentWrapper">
 			<div id="titleAndButton">
+
 				<div id="pageTitle">
-					<h1 id="animalTitle" th:text= "#{animal.text.title}"></h1>
-					<span th:text=${addMessage}></span>
+					<h1 id="animalTitle" th:text="#{animal.text.title}"></h1>
+					<span id = "messages" th:text=${addMessage}></span>
 				</div>
 				<div id="buttonRechts">
 					<th:block
 						th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-						<a id="rechtsKnop" th:href="@{/addAnimal}" th:text= "#{button.add.text}"> Add animal</a>
+						<a id="rechtsKnop" th:href="@{/addAnimal}"
+							th:text="#{button.add.text}"> Add animal</a>
 					</th:block>
 				</div>
 			</div>
-			<form id="filterForm" method="get">
-				<div id="filterSection">
-					<label for="breedFilter" th:text= "#{select.breed}"></label> <select
-						id="breedFilter" name="selectedBreed">
-						<option value="" th:text="#{select.breed.dropdown}"></option>
-						<th:block th:each="breed: ${breedList}">
-							<option th:value="${breed}" th:text="${breed}" />
-						</th:block>
-					</select>
-					<button type="submit" th:text="#{text.filter}">Filter</button>
+			<div id="select">
+				<div id="select-left">
+					<form id="filterForm" method="get">
+						<div id="filterSection">
+							<label for="breedFilter" th:text="#{select.breed}"></label> <select
+								id="breedFilter" name="selectedBreed">
+								<option value="" th:text="#{select.breed.dropdown}"></option>
+								<th:block th:each="breed: ${breedList}">
+									<option th:value="${breed}" th:text="${breed}" />
+								</th:block>
+							</select>
+							<button type="submit" th:text="#{text.filter}">Filter</button>
+						</div>
+					</form>
 				</div>
-			</form>
+				<div id="select-right">
+					<div id="languageSelecter">
+						<label th:text="#{select.language}"></label> <select
+							id="languageChanger" onchange="location = this.value;">
+							<option value="?lang=en"
+								th:selected="${#locale.language == 'en'}">English</option>
+							<option value="?lang=nl"
+								th:selected="${#locale.language == 'nl'}">Nederlands</option>
+						</select>
+					</div>
+				</div>
+			</div>
 			<script>
 				document
 						.getElementById("filterForm")
@@ -61,31 +78,38 @@
 				<div id="animal" th:each="animal: ${animalList}">
 					<a th:href="|/animal/${animal.identificatiecode}|">
 						<div id="animalBox">
-							
+
 							<div id="imagePart">
 								<img id="animalImg" class="text" th:alt="${animal.name}"
 									th:src="${animal.img}">
 							</div>
-							
-							<p id="name" class="text" th:text="|#{animal.text.name} ${animal.name}|" />
-							<div id= "textRemove">
-							<form id="delete" th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-								th:action="@{|/deleteAnimal/${animal.identificatiecode}|}"
-								method="post">
-								<button type="submit" id="deleteButton">
-									<i class="fa-solid fa-trash"></i>
-								</button>
-							</form>
+
+							<p id="name" class="text"
+								th:text="|#{animal.text.name} ${animal.name}|" />
+							<div id="textRemove">
+								<form id="delete"
+									th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+									th:action="@{|/deleteAnimal/${animal.identificatiecode}|}"
+									method="post">
+									<button type="submit" id="deleteButton">
+										<i class="fa-solid fa-trash"></i>
+									</button>
+								</form>
 							</div>
-							<p id="breed" class="text" th:text="|#{animal.text.breed} ${animal.breed}|" />
+							<p id="breed" class="text"
+								th:text="|#{animal.text.breed} ${animal.breed}|" />
 							<p id="birthDate" class="text"
-								th:text="|#{animal.text.birth.date} ${animal.dateOfBirth}|" />
+								th:text="${animal.dateOfBirth} != null ? 
+             					|#{animal.text.birth.date} ${animal.dateOfBirth}| : 
+             					|#{ageEstimation.animal} ${animal.ageEstimation}|" />
 							<p th:if="${!animal.kanMet[5]}" id=cross>
-								<i class="fa-solid fa-check"></i><span th:text="#{free.for.adoption}"></span>
+								<i class="fa-solid fa-check"></i><span
+									th:text="#{free.for.adoption}"></span>
 							</p>
 							<p th:if="${animal.kanMet[5]}" id=check>
-							<i class="fa-solid fa-xmark"></i><span th:text="#{animal.text.adopted}"></span>
-								
+								<i class="fa-solid fa-xmark"></i><span
+									th:text="#{animal.text.adopted}"></span>
+
 							</p>
 						</div>
 					</a>

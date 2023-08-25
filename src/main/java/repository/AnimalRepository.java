@@ -14,4 +14,5 @@ public interface AnimalRepository extends CrudRepository<Animal,String> {
 	@Query("SELECT DISTINCT a.breed FROM Animal a")
     Optional<List<String>> findAllBreeds();
 	Optional<List<Animal>> findByBreed(String breed);
+	List<Animal> findByGender(String gender);
 }
