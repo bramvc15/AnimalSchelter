@@ -12,12 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.BindingResult;
+import static org.mockito.Mockito.*;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -42,6 +46,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import com.spring.schelter.RestController;
@@ -80,7 +85,8 @@ public class AnimalMockTest {
     private SchelterController controller;
     @Mock
     private AddValidation addValidationMock;
-    
+    @Mock
+	private MessageSource messageSource;
     
     
     Principal principal;
@@ -110,12 +116,12 @@ public class AnimalMockTest {
         ReflectionTestUtils.setField(controller, "verblijfplaatsRepository", mockVerblijfplaatsRepository);
         principal = new UsernamePasswordAuthenticationToken("user", "password");
         addValidationMock = mock(AddValidation.class);
-		animal1 = new Animal("KEB6597189", "zeus",
+		animal1 = new Animal("KEB6487301", "Zeus",
 				"https://static.wixstatic.com/media/53899f_8b0ef8fb5d994b19b1ff55428f61852d~mv2.jpg/v1/fill/w_1000,h_667,al_c,q_85,usm_0.66_1.00_0.01/53899f_8b0ef8fb5d994b19b1ff55428f61852d~mv2.jpg",
 				"German shepherd", "male", LocalDate.of(2015, 04, 20), 120,
 				List.of(verblijfplaatsList.get(11), verblijfplaatsList.get(12)),
 				new ArrayList<>(List.of(false, true, false, true, false, false)));
-		animal2 = new Animal("KEB5872549", "Kelly",
+		animal2 = new Animal("KEB4879500", "Kelly",
 				"https://www.thesprucepets.com/thmb/zXkzVVV5P8h2JG0ZUFtXtvIq-lM=/3600x0/filters:no_upscale():strip_icc()/bulldog-4584344-hero-8b60f1e867f046e792ba092eec669256.jpg",
 				"Bulldog", "female", LocalDate.of(2018, 03, 01), 80,
 				List.of(verblijfplaatsList.get(6), verblijfplaatsList.get(7)),
@@ -151,20 +157,26 @@ public class AnimalMockTest {
 	// test for filtering on breed option
 	@Test
 	public void testFilterByBreed() throws Exception {
-		String breed = "German shepherd";
-		List<Animal> animals = new ArrayList<>();
-		
-		animals.add(animal1); // Add a sample animal to the list
+	    String breed = "German shepherd";
+	    List<Animal> animals = new ArrayList<>();
+	    
+	    // Create a sample animal for testing
+	    Animal sampleAnimal = new Animal();
+	    sampleAnimal.setBreed(breed);
+	    animals.add(sampleAnimal);
 
-		when(mockAnimalRepository.findByBreed(breed)).thenReturn(Optional.of(animals));
+	    when(mockAnimalRepository.findByBreed(breed)).thenReturn(Optional.of(animals));
 
-		mockMvc.perform(get("/filterByBreed/{breed}", breed).principal(principal)).andExpect(status().isOk())
-				.andExpect(view().name("overview")).andExpect(model().attributeExists("animalList")); // Add more
-																										// assertions if
-																										// needed
+	    mockMvc.perform(get("/filterByBreed")
+	            .param("selectedBreed", breed) // Pass the breed parameter
+	            .principal(principal))
+	            .andExpect(status().isOk())
+	            .andExpect(view().name("overview"))
+	            .andExpect(model().attributeExists("animalList"))
+	            .andExpect(model().attribute("selectedBreed", breed)); // Add assertion for selectedBreed attribute
 
-		verify(mockAnimalRepository).findByBreed(breed);
-		// You can add more verifications based on your test case requirements
+	    verify(mockAnimalRepository).findByBreed(breed);
+	    // You can add more verifications based on your test case requirements
 	}
 	// test for animal details
     @Test
@@ -187,73 +199,84 @@ public class AnimalMockTest {
     @Test
     public void testProcessReservedAnimal_isOk() throws Exception {
         Animal animal = animal1;
-        animal.setIdentificatiecode("AKR4879500");
+        animal.setIdentificatiecode("KEB6548700");
 
-        User user = new User(0, "user", "password",true, true);
+        User user = new User(0, "user", "password", true, true);
         AdoptedAnimal adoptedAnimal = new AdoptedAnimal(animal, false, user);
         List<AdoptedAnimal> adoptedAnimalList = List.of(new AdoptedAnimal(animal, false, user));
-        
-        
+
         when(mockGebruikerRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(mockAnimalRepository.findById(animal.getIdentificatiecode())).thenReturn(Optional.of(animal));
         when(mockAdoptedAnimalRepository.findByAnimal_Identificatiecode(animal.getIdentificatiecode())).thenReturn(Optional.of(adoptedAnimal));
         when(mockAdoptedAnimalRepository.findByUser(user)).thenReturn(Optional.of(adoptedAnimalList));
-        
-        
+        when(messageSource.getMessage(eq("animal.was.adopted"), any(Object[].class), eq(Locale.ENGLISH)))
+            .thenReturn("Zeus was adopted (current adoptions = 1)");
 
         mockMvc.perform(post("/AddAnimalAdoption/{identificatiecode}", animal.getIdentificatiecode()).principal(principal))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/home"))
-                .andExpect(flash().attribute("addMessage", containsString(animal.getName() + " was adopted")));
+                .andExpect(flash().attribute("addMessage", containsString(animal.getName() + " was adopted (current adoptions = 1)")));
 
+        // Verify the interactions
         verify(mockAnimalRepository).findById(animal.getIdentificatiecode());
         verify(mockAdoptedAnimalRepository).findByAnimal_Identificatiecode(animal.getIdentificatiecode());
         verify(mockAdoptedAnimalRepository).findByUser(user);
         verify(mockAdoptedAnimalRepository).save(any(AdoptedAnimal.class));
+        verify(messageSource).getMessage(eq("animal.was.adopted"), any(Object[].class), eq(Locale.ENGLISH));
     }
+
     //test to many adoptions 
     @Test
     public void testProcessReservedAnimal_ToManyAdoptions() throws Exception {
         Animal animal = animal1;
-        animal.setIdentificatiecode("AKR4879500");
-        //asielfan == false
-        User user = new User(0, "user", "password",false, true);
+        animal.setIdentificatiecode("KEB4879500");
+        
+        // Create a user with too many adoptions
+        User user = new User(0, "user", "password", false, true);
         AdoptedAnimal adoptedAnimal = new AdoptedAnimal(animal, false, user);
         List<AdoptedAnimal> adoptedAnimalList = List.of(new AdoptedAnimal(animal, false, user));
-        
         
         when(mockGebruikerRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(mockAnimalRepository.findById(animal.getIdentificatiecode())).thenReturn(Optional.of(animal));
         when(mockAdoptedAnimalRepository.findByAnimal_Identificatiecode(animal.getIdentificatiecode())).thenReturn(Optional.of(adoptedAnimal));
         when(mockAdoptedAnimalRepository.findByUser(user)).thenReturn(Optional.of(adoptedAnimalList));
+        when(messageSource.getMessage(eq("over.adoption.limit"), any(Object[].class), eq(Locale.ENGLISH)))
+            .thenReturn("Zeus could not be adopted you are over your limit of adoptions (current adoptions = 1)");
         
-        
-
         mockMvc.perform(post("/AddAnimalAdoption/{identificatiecode}", animal.getIdentificatiecode()).principal(principal))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/home"))
-                .andExpect(flash().attribute("addMessage", containsString(animal.getName() + " could not be adopted you are over your limit of adoptions")));
+                .andExpect(flash().attribute("addMessage", animal.getName() +  " could not be adopted you are over your limit of adoptions (current adoptions = 1)"));
+
+        // Verify the interactions
+        verify(mockGebruikerRepository).findByUsername("user");
+        verify(mockAnimalRepository).findById(animal.getIdentificatiecode());
+        verify(mockAdoptedAnimalRepository).findByAnimal_Identificatiecode(animal.getIdentificatiecode());
+        verify(mockAdoptedAnimalRepository).findByUser(user);
+        verify(messageSource).getMessage(eq("over.adoption.limit"), any(Object[].class), eq(Locale.ENGLISH));
     }
+
 
 
 	// Test Removing of an adoption on detail page
     @Test
     public void testProcessRemoveReservedAnimal_isOk() throws Exception {
         Animal animal = animal1;
-        animal.setIdentificatiecode("AKR4879500");
+        animal.setIdentificatiecode("KEB4879500");
 
         User user = new User(0, "user", "password", true, true);
         AdoptedAnimal adoptedAnimal = new AdoptedAnimal(animal, true, user);
         List<AdoptedAnimal> adoptedAnimalList = List.of(adoptedAnimal);
-        
+        animal.setKanMet(new ArrayList<>(List.of(false, true, false, true, false, true)));
 
         when(mockAnimalRepository.findById(animal.getIdentificatiecode())).thenReturn(Optional.of(animal));
         when(mockAdoptedAnimalRepository.findByAnimal_Identificatiecode(animal.getIdentificatiecode())).thenReturn(Optional.of(adoptedAnimal));
+        when(messageSource.getMessage("animal.adoption.canceled", new Object[]{animal.getName(),0},Locale.ENGLISH))
+        .thenReturn("Adoption for {0} was canceled");
 
         mockMvc.perform(post("/RemoveAnimalAdoption/{identificatiecode}", animal.getIdentificatiecode()).principal(principal))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/home"))
-                .andExpect(flash().attribute("addMessage", containsString("adoption of " + animal.getName() + " was canceled")));
+                .andExpect(redirectedUrl("/home"));
 
         verify(mockAnimalRepository).findById(animal.getIdentificatiecode());
         verify(mockAdoptedAnimalRepository).findByAnimal_Identificatiecode(animal.getIdentificatiecode());

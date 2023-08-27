@@ -37,6 +37,7 @@ import repository.AdoptedAnimalRepository;
 import repository.AnimalRepository;
 import repository.GebruikerRepository;
 import repository.VerblijfplaatsRepository;
+import utility.Message;
 import validator.AddValidation;
 
 @Controller
@@ -51,6 +52,8 @@ public class SchelterController {
 	private VerblijfplaatsRepository verblijfplaatsRepository;
 	@Autowired
 	private AddValidation addValidation;
+	@Autowired
+	private MessageSource messageSource;
 
 	@GetMapping(value = "/home")
 	public String listAnimals(HttpServletRequest request, HttpServletResponse response,
@@ -66,14 +69,15 @@ public class SchelterController {
 		return "overview";
 	}
 
-	@GetMapping(value = "/filterByBreed/{breed}")
-	public String filterByBreed(@PathVariable("breed") String breed, Model model, Principal principal) {
+	@GetMapping(value = "/filterByBreed")
+	public String filterByBreed(@RequestParam(name = "selectedBreed") String breed, Model model, Principal principal) {
 
 		if (breed != null) {
 			Optional<List<Animal>> animalListop = animalRepository.findByBreed(breed);
 			if (animalListop.isPresent()) {
 				List<Animal> animalall = animalListop.get();
 				initOverview(animalall, model, principal);
+				model.addAttribute("selectedBreed", breed);
 			}
 		} else {
 			List<Animal> animalall = (List<Animal>) animalRepository.findAll();
@@ -83,7 +87,7 @@ public class SchelterController {
 		return "overview";
 	}
 
-	public void initOverview(List<Animal> animalall, Model model, Principal principal) {
+	private void initOverview(List<Animal> animalall, Model model, Principal principal) {
 		String username = principal.getName();
 		List<Animal> animalsortede = animalall.stream()
 				.sorted(Comparator.comparing(Animal::getBreed).thenComparing(Animal::getDateOfBirth))
@@ -133,7 +137,7 @@ public class SchelterController {
 
 	@PostMapping(value = "/AddAnimalAdoption/{identificatiecode}")
 	public String processReservedAnimal(@PathVariable("identificatiecode") String identificatiecode, Model model,
-			Principal principal, RedirectAttributes redirectAttributes, Authentication auth) {
+			Principal principal, RedirectAttributes redirectAttributes, Authentication auth, Locale locale) {
 		Optional<Animal> animalop = animalRepository.findById(identificatiecode);
 		Optional<AdoptedAnimal> adoptedAnimalop = adoptedAnimalRepository
 				.findByAnimal_Identificatiecode(identificatiecode);
@@ -145,20 +149,21 @@ public class SchelterController {
 
 			if (user.isPresent()) {
 				Optional<List<AdoptedAnimal>> aantaladoptions = adoptedAnimalRepository.findByUser(user.get());
+				int currentAdoptions = aantaladoptions.get().size();
 				if (aantaladoptions.isPresent()) {
 					if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
 						processAdoption(animal, adoptedAnimal, user.get());
-						redirectAttributes.addFlashAttribute("addMessage", animal.getName() + " was adopted");
-					} else if (!user.get().isAsielfan() && aantaladoptions.get().size() < 1) {
+						redirectAttributes.addFlashAttribute("addMessage", messageSource.getMessage("animal.was.adopted", new Object[]{animal.getName(), currentAdoptions+1}, locale));
+						
+					} else if (!user.get().isAsielfan() && currentAdoptions < 1) {
 						processAdoption(animal, adoptedAnimal, user.get());
 						adoptedAnimalRepository.save(adoptedAnimal);
-						redirectAttributes.addFlashAttribute("addMessage", animal.getName() + " was adopted");
-					} else if (user.get().isAsielfan() && aantaladoptions.get().size() < 2) {
+						redirectAttributes.addFlashAttribute("addMessage", messageSource.getMessage("animal.was.adopted", new Object[]{animal.getName(), currentAdoptions+1}, locale));
+					} else if (user.get().isAsielfan() && currentAdoptions < 2) {
 						processAdoption(animal, adoptedAnimal, user.get());
-						redirectAttributes.addFlashAttribute("addMessage", animal.getName() + " was adopted");
+						redirectAttributes.addFlashAttribute("addMessage", messageSource.getMessage("animal.was.adopted", new Object[]{animal.getName(), currentAdoptions+1}, locale));
 					} else {
-						redirectAttributes.addFlashAttribute("addMessage",
-								animal.getName() + " could not be adopted you are over your limit of adoptions");
+						redirectAttributes.addFlashAttribute("addMessage", messageSource.getMessage("over.adoption.limit", new Object[]{animal.getName(),currentAdoptions}, locale));
 					}
 				}
 			}
@@ -179,7 +184,7 @@ public class SchelterController {
 
 	@PostMapping(value = "/RemoveAnimalAdoption/{identificatiecode}")
 	public String processRemoveReservedAnimal(@PathVariable("identificatiecode") String identificatiecode, Model model,
-			Principal principal, RedirectAttributes redirectAttributes) {
+			Principal principal, RedirectAttributes redirectAttributes, Locale locale) {
 		Optional<Animal> animalop = animalRepository.findById(identificatiecode);
 		Optional<AdoptedAnimal> adoptedAnimalop = adoptedAnimalRepository
 				.findByAnimal_Identificatiecode(identificatiecode);
@@ -192,7 +197,7 @@ public class SchelterController {
 			adoptedAnimal.setUser(null);
 			animalRepository.save(animal);
 			adoptedAnimalRepository.save(adoptedAnimal);
-			redirectAttributes.addFlashAttribute("addMessage", "adoption of " + animal.getName() + " was canceled");
+			redirectAttributes.addFlashAttribute("addMessage", messageSource.getMessage("animal.adoption.canceled", new Object[]{animal.getName()}, locale));
 		}
 
 		return "redirect:/home";
@@ -229,7 +234,7 @@ public class SchelterController {
 			}
 		}
 		animal.setVerplijfplaatsen(verblijfplaatsList);
-		
+		animal.setName(animal.getName().substring(0,1).toUpperCase() + animal.getName().substring(1));
 		animalRepository.save(animal);
 		if (user.isPresent()) {
 			AdoptedAnimal adoptedAnimal = new AdoptedAnimal(animal, false, user.get());
@@ -283,9 +288,9 @@ public class SchelterController {
 		if (animalop.isPresent() && adoptedAnimalop.isPresent()) {
 			Animal animal = animalop.get();
 			AdoptedAnimal adoptedAnimal = adoptedAnimalop.get();
-
-			animalRepository.delete(animal);
 			adoptedAnimalRepository.delete(adoptedAnimal);
+			animalRepository.delete(animal);
+			
 			redirectAttributes.addFlashAttribute("addMessage", animal.getName() + " was successfully deleted.");
 
 		} else {

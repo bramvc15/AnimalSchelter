@@ -20,7 +20,7 @@
 
 				<div id="pageTitle">
 					<h1 id="animalTitle" th:text="#{animal.text.title}"></h1>
-					<span id = "messages" th:text=${addMessage}></span>
+
 				</div>
 				<div id="buttonRechts">
 					<th:block
@@ -32,19 +32,21 @@
 			</div>
 			<div id="select">
 				<div id="select-left">
-					<form id="filterForm" method="get">
-						<div id="filterSection">
+					<div id="filterSection">
+						<form id="filterForm" th:action="@{/filterByBreed}" method="get">
 							<label for="breedFilter" th:text="#{select.breed}"></label> <select
 								id="breedFilter" name="selectedBreed">
 								<option value="" th:text="#{select.breed.dropdown}"></option>
 								<th:block th:each="breed: ${breedList}">
-									<option th:value="${breed}" th:text="${breed}" />
+									<option th:value="${breed}" th:text="${breed}" th:selected="${breed == selectedBreed}"/>
 								</th:block>
 							</select>
 							<button type="submit" th:text="#{text.filter}">Filter</button>
-						</div>
-					</form>
+						</form>
+					</div>
+
 				</div>
+
 				<div id="select-right">
 					<div id="languageSelecter">
 						<label th:text="#{select.language}"></label> <select
@@ -57,21 +59,7 @@
 					</div>
 				</div>
 			</div>
-			<script>
-				document
-						.getElementById("filterForm")
-						.addEventListener(
-								"submit",
-								function(event) {
-									event.preventDefault();
-									const selectedBreed = document
-											.getElementById("breedFilter").value;
-									const baseUrl = "/filterByBreed/";
-									const url = selectedBreed ? (baseUrl + selectedBreed)
-											: baseUrl;
-									window.location.href = url;
-								});
-			</script>
+			<span id="messages" th:text=${addMessage}></span>
 
 			<div id="animalWrapper">
 
@@ -89,7 +77,7 @@
 							<div id="textRemove">
 								<form id="delete"
 									th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-									th:action="@{|/deleteAnimal/${animal.identificatiecode}|}"
+									th:action="|/deleteAnimal/${animal.identificatiecode}|"
 									method="post">
 									<button type="submit" id="deleteButton">
 										<i class="fa-solid fa-trash"></i>

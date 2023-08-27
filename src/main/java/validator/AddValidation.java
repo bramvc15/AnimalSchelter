@@ -10,6 +10,7 @@ import org.springframework.validation.Validator;
 
 import domain.Animal;
 import repository.AnimalRepository;
+import repository.VerblijfplaatsRepository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,8 @@ public class AddValidation implements Validator {
 
 	@Autowired
 	private AnimalRepository animalRepository;
+	@Autowired
+	private VerblijfplaatsRepository verblijfplaatsRepository;
 
 	@Autowired
 	private MessageSource messageSource;
@@ -71,9 +74,7 @@ public class AddValidation implements Validator {
 		}
 
 		// Date of birth validation (optional)
-		if (animal.getDateOfBirth().compareTo(LocalDate.now()) > 0) {
-			errors.rejectValue("dateOfBirth", "dateWasInTheFuture");
-		}
+
 		if (animal.getDateOfBirth() == null) {
 			String ageEstimation = animal.getAgeEstimation();
 			if (!ageEstimation.equalsIgnoreCase("Jong") && !ageEstimation.equalsIgnoreCase("Volwassen")
@@ -84,14 +85,24 @@ public class AddValidation implements Validator {
 		} else {
 			try {
 				// Check if the LocalDate is in "DD/MM/YYYY" format
-				DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-				String dateOfBirthStr = dateFormatter.format(animal.getDateOfBirth());
-				LocalDate.parse(dateOfBirthStr, dateFormatter);
+				if (animal.getDateOfBirth().compareTo(LocalDate.now()) > 0) {
+					errors.rejectValue("dateOfBirth", "dateWasInTheFuture");
+				} else {
+					DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					String dateOfBirthStr = dateFormatter.format(animal.getDateOfBirth());
+					LocalDate.parse(dateOfBirthStr, dateFormatter);
+				}
+
 			} catch (DateTimeParseException e) {
 				errors.rejectValue("dateOfBirth", "InvalidFormat.animal.dateOfBirth");
 			}
 		}
-
+		//medical cost validation
+		if(animal.getMedicalCost() < 0) {
+			String errorMessage = messageSource.getMessage("not.lower.then.zero",
+					new Object[] {}, Locale.ENGLISH);
+			errors.rejectValue("medicalCost", "lowerThenZero", errorMessage);
+		}
 		// Verblijfplaats validation
 
 		for (int i = 0; i < animal.getVerplijfplaatsen().size(); i++) {
@@ -99,11 +110,19 @@ public class AddValidation implements Validator {
 			int hokcode1 = animal.getVerplijfplaatsen().get(i).getHokcode1();
 			int hokcode2 = animal.getVerplijfplaatsen().get(i).getHokcode2();
 			String hoknaam = animal.getVerplijfplaatsen().get(i).getHoknaam();
-			System.out.println(hokcode1 + hokcode2 + hoknaam);
-			if (hokcode1 == 0 && hokcode2 == 0 && hoknaam.equals("")) {
 			
-			}
-			else {
+			if (hokcode1 == 0 && hokcode2 == 0 && hoknaam.equals("")) {
+
+			} else {
+				boolean dubbel1 = verblijfplaatsRepository.existsByHokcode1(hokcode1);
+				boolean dubbel2 = verblijfplaatsRepository.existsByHokcode2(hokcode2);
+				boolean dubbel3 = verblijfplaatsRepository.existsByHoknaam(hoknaam);
+				System.out.println("" + dubbel1 + dubbel2 + dubbel3);
+				if( dubbel1 && dubbel2 && dubbel3) {
+					String errorMessage = messageSource.getMessage("duplicate.verblijfplaats",
+							new Object[] {}, Locale.ENGLISH);
+					errors.rejectValue("verplijfplaatsen[" + i + "].hokcode1", "outOfRange", errorMessage);
+				}
 				if (hokcode1 < 50 || hokcode1 > 300) {
 					String errorMessage = messageSource.getMessage("OutOfRange.animal.hokcode1",
 							new Object[] { 50, 300 }, Locale.ENGLISH);
@@ -114,9 +133,9 @@ public class AddValidation implements Validator {
 							new Object[] { 50, 300 }, Locale.ENGLISH);
 					errors.rejectValue("verplijfplaatsen[" + i + "].hokcode2", "outOfRange", errorMessage);
 				}
-				if (hokcode2 < hokcode1 + 50 ) {
-					String errorMessage = messageSource.getMessage("Not.biggger.enough.hokcode2",
-							new Object[] { 50}, Locale.ENGLISH);
+				if (hokcode2 < hokcode1 + 50) {
+					String errorMessage = messageSource.getMessage("Not.biggger.enough.hokcode2", new Object[] { 50 },
+							Locale.ENGLISH);
 					errors.rejectValue("verplijfplaatsen[" + i + "].hokcode2", "outOfRange", errorMessage);
 				}
 				if (!hoknaam.matches("^[a-zA-Z]+$")) {
